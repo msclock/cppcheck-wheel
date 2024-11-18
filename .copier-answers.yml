@@ -1,0 +1,25 @@
+_commit: a010dcf
+_src_path: .
+author_email: msclock@126.com
+author_name: msclock
+codecov_notify_builds: 1
+codecov_threshold: 5%
+copyright_holder: msclock
+copyright_license: Apache Software License
+copyright_year: '2024'
+create_devcontainer: true
+default_py: '3.10'
+docs_type: sphinx
+max_py: '3.13'
+min_py: '3.7'
+module_name: cppcheck
+organization_name: msclock
+project_description: Package cppcheck as a python wheel.
+project_name: Cppcheck Wheel
+repo_name: cppcheck-wheel
+repo_namespace: msclock
+repo_platform: github
+use_codecov: true
+use_codeql: true
+use_conan: false
+use_cpm: false

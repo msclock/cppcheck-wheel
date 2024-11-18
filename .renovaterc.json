@@ -1,0 +1,133 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    ":enablePreCommit"
+  ],
+  "automergeType": "pr",
+  "automergeStrategy": "merge-commit",
+  "platformAutomerge": true,
+  "packageRules": [
+    {
+      "description": "Group renovate docker tag and pre-commit-hooks tag",
+      "groupName": "renovate group",
+      "extends": ["schedule:automergeMonthly"],
+      "addLabels": [
+        "auto-approval",
+        "renovate"
+      ],
+      "matchDatasources": [
+        "docker",
+        "github-tags"
+      ],
+      "automerge": true,
+      "matchDepNames": [
+        "ghcr.io/renovatebot/renovate",
+        "renovatebot/pre-commit-hooks"
+      ]
+    },
+    {
+      "commitMessageTopic": "serious-scaffold-cpp",
+      "matchDepTypes": [
+        "copier-template"
+      ],
+      "postUpgradeTasks": {
+        "commands": [
+          "git stash",
+          "pip install copier==9.3.1",
+          "copier update --defaults --vcs-ref {{{newVersion}}}"
+        ]
+      },
+      "semanticCommitScope": "copier-template"
+    },
+    {
+      "description": "Group apt packages to avoid failure when multiple packages are outdated.",
+      "groupName": "apt packages",
+      "matchDepTypes": [
+        "apt"
+      ]
+    },
+    {
+      "description": "Update cppcheck with label update-cppcheck and depName commit message topic",
+      "addLabels": [
+        "update-cppcheck"
+      ],
+      "matchDepTypes": [
+        "cppcheck-dep"
+      ],
+      "automerge": true,
+      "semanticCommitScope": "cppcheck",
+      "commitMessageTopic": "{{depName}}"
+    }
+  ],
+  "customManagers": [
+    {
+      "description": "Update python packages installed with pip or pipx",
+      "customType": "regex",
+      "datasourceTemplate": "pypi",
+      "fileMatch": [
+        "^\\.github/workflows/.+\\.yml$",
+        "^\\.renovaterc\\.json$",
+        "^Makefile$"
+      ],
+      "matchStrings": [
+        "pipx? install.* (?<depName>.*?)==(?<currentValue>.*?)[\\s\";]"
+      ]
+    },
+    {
+      "description": " Update vcpkg.json builtin-baseline with git hash",
+      "customType": "regex",
+      "currentValueTemplate": "master",
+      "datasourceTemplate": "git-refs",
+      "depNameTemplate": "https://github.com/microsoft/vcpkg",
+      "depTypeTemplate": "vcpkg-builtin-baseline",
+      "fileMatch": [
+        "^vcpkg\\.json$"
+      ],
+      "matchStrings": [
+        "\"builtin-baseline\": \"(?<currentDigest>.*?)\""
+      ]
+    },
+    {
+      "description": "Update registration baseline with git hash",
+      "customType": "regex",
+      "currentValueTemplate": "master",
+      "datasourceTemplate": "git-refs",
+      "depTypeTemplate": "registration-baseline",
+      "fileMatch": [
+        "^vcpkg\\.json$"
+      ],
+      "matchStrings": [
+        "\"baseline\": \"(?<currentDigest>.*?)\"[^}]+?\"repository\": \"(?<depName>.*?)\""
+      ]
+    },
+    {
+      "description": "Update ss template from serious-scaffold",
+      "customType": "regex",
+      "datasourceTemplate": "git-tags",
+      "depNameTemplate": "https://github.com/serious-scaffold/ss-pybind11.git",
+      "depTypeTemplate": "copier-template",
+      "fileMatch": [
+        "^\\.copier-answers\\.yml$"
+      ],
+      "matchStrings": [
+        "_commit: (?<currentValue>.*?)\n"
+      ],
+      "versioningTemplate": "semver"
+    },
+    {
+      "description": "Update cppcheck",
+      "customType": "regex",
+      "datasourceTemplate": "git-tags",
+      "depNameTemplate": "https://github.com/danmar/cppcheck.git",
+      "depTypeTemplate": "cppcheck-dep",
+      "fileMatch": [
+        "vcpkg\\.json$"
+      ],
+      "matchStrings": [
+        "\"name\": \"cppcheck\"[^}]+?\"version\": \"(?<currentValue>.*?)\""
+      ]
+    }
+  ]
+}

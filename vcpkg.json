@@ -1,0 +1,46 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "cppcheck-wheel",
+  "description": "Package cppcheck as a python wheel.",
+  "builtin-baseline": "7adc2e4d49e8d0efc07a369079faa6bc3dbb90f3",
+  "homepage": "https://github.com/msclock/cppcheck-wheel",
+  "dependencies": [
+    "cppcheck",
+    "cmake-modules",
+    "robotology-cmake-ycm"
+  ],
+  "overrides": [
+    {
+      "name":  "cppcheck",
+      "version": "2.16.0"
+    },
+    {
+      "name": "cmake-modules",
+      "version": "1.6.2"
+    },
+    {
+      "name": "robotology-cmake-ycm",
+      "version": "0.16.3"
+    }
+  ],
+  "vcpkg-configuration": {
+    "registries": [
+      {
+        "kind": "git",
+        "baseline": "06dc89dbb62a70ff9725f23da1cc301e1adf84b1",
+        "repository": "https://github.com/msclock/cmake-registry",
+        "packages": [
+          "cmake-modules",
+          "robotology-cmake-ycm",
+          "vcpkg-cmake-module"
+        ]
+      }
+    ],
+    "overlay-ports": [
+      "cmake/vcpkg/ports"
+    ],
+    "overlay-triplets": [
+      "cmake/vcpkg/triplets"
+    ]
+  }
+}
