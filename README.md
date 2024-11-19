@@ -24,6 +24,14 @@ Package cppcheck as a python wheel.
 
 <!-- writes more things here -->
 
+## Install
+
+Package-built has uploaded to pypi and just install with the command:
+
+```bash
+pip install cppcheck
+```
+
 ## License
 
 Apache Software License, for more details, see the [LICENSE](https://github.com/msclock/cppcheck-wheel/blob/master/LICENSE) file.
