@@ -70,8 +70,11 @@ jobs:
           merge-multiple: true
 
       - uses: pypa/gh-action-pypi-publish@release/v1
+        env:
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN  }}
         with:
           repository-url: https://pypi.org/legacy/
+          password: ${{ secrets.PYPI_API_TOKEN }}
 
   pages:
     name: Deploy to GitHub Pages
