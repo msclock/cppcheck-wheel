@@ -17,9 +17,9 @@ env:
   FORCE_COLOR: 3
 
 jobs:
-  make_sdist:
-    name: Make SDist
-    runs-on: ubuntu-latest
+  build_sdist:
+    name: Build SDist
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -34,32 +34,82 @@ jobs:
           path: dist/*.tar.gz
 
   build_wheels:
-    name: Wheel on ${{ matrix.os }}
+    name: Build ${{ matrix.arch }} wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-22.04
+            arch: x86_64
+          - os: ubuntu-22.04
+            arch: i686
+          - os: ubuntu-22.04
+            arch: aarch64
+          - os: ubuntu-22.04
+            arch: ppc64le
+          - os: ubuntu-22.04
+            arch: s390x
+          - os: ubuntu-22.04
+            arch: armv7l
+          - os: windows-2019
+            arch: AMD64
+          - os: windows-2022
+            arch: ARM64
+          - os: windows-2019
+            arch: x86
+          - os: macos-13
+            arch: universal2
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: pypa/cibuildwheel@v2.21
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3.2.0
+        if: runner.os == 'Linux'
+
+      - uses: yezz123/setup-uv@v4
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.21.3
+        env:
+          CIBW_ARCHS: ${{ matrix.arch }}
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
+          name: cibw-wheels-${{ matrix.os }}-${{ matrix.arch }}
           path: wheelhouse/*.whl
+
+      - name: Test wheel on host Linux
+        if: runner.os == 'Linux' && matrix.arch == 'x86_64'
+        run: |
+          pip install wheelhouse/*manylinux*x86_64*.whl
+          cppcheck --version
+          python -m cppcheck --version
+          python --version
+
+  check_dist:
+    name: Check dist
+    needs: [build_wheels, build_sdist, test_sdist]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cibw-*
+          path: dist
+          merge-multiple: true
+
+      - run: pipx run twine check --strict dist/*
 
   upload_all:
     needs: [build_wheels, make_sdist]
     environment: pypi
     permissions:
       id-token: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     if: github.event_name == 'release' && github.event.action == 'published'
 
     steps:
