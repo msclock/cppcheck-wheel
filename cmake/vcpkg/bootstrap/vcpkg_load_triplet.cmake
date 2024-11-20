@@ -169,6 +169,12 @@ function(_vcpkg_detect_host_triplet)
 
   if(NOT _detect_target_triplet_arch STREQUAL ""
      AND NOT _detect_target_triplet_plat STREQUAL "")
+    set(VCPKG_DETECT_TRIPLET_ARCH
+        ${_detect_target_triplet_arch}
+        PARENT_SCOPE)
+    set(VCPKG_DETECT_TRIPLET_PLAT
+        ${_detect_target_triplet_plat}
+        PARENT_SCOPE)
     set(VCPKG_HOST_TRIPLET
         "${_detect_target_triplet_arch}-${_detect_target_triplet_plat}"
         PARENT_SCOPE)

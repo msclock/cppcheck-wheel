@@ -58,6 +58,8 @@ Changelog = "https://github.com/serious-scaffold/cppcheck-wheel/releases"
 [tool.scikit-build]
 minimum-version = "0.9"
 build-dir = "build/{wheel_tag}"
+cmake.verbose = true
+logging.level = "DEBUG"
 wheel.py-api = "py3"
 wheel.expand-macos-universal-tags = true
 metadata.version.provider = "scikit_build_core.metadata.setuptools_scm"
@@ -73,40 +75,17 @@ cmake.args = [
 write_to = "src/cppcheck/_version.py"
 
 [tool.cibuildwheel]
-build = "cp39-*"
 build-verbosity = 1
-build-frontend = "build[uv]"
 test-command = "pytest {project}/tests"
 test-extras = ["test"]
 test-skip = ["*-win_arm64", "*-macosx_universal2:arm64"]
-before-all = ['cmake --version', 'git --version']
-musllinux-x86_64-image = "musllinux_1_1"
-musllinux-i686-image = "musllinux_1_1"
-musllinux-aarch64-image = "musllinux_1_1"
-musllinux-ppc64le-image = "musllinux_1_1"
-musllinux-s390x-image = "musllinux_1_1"
-musllinux-armv7l-image = "musllinux_1_2"
 
 [tool.cibuildwheel.linux]
-before-build =['yum install zip -y || apk add zip || true']
-
-[tool.cibuildwheel.macos.environment]
-MACOSX_DEPLOYMENT_TARGET = "10.10"
-
-[[tool.cibuildwheel.overrides]]
-select = "*-manylinux_{x86_64,i686}"
-manylinux-x86_64-image = "manylinux2010"
-manylinux-i686-image = "manylinux2010"
-build-frontend = "pip"
-environment = { LDFLAGS = "-static-libstdc++" }
-
-[[tool.cibuildwheel.overrides]]
-select = "*-musllinux_*"
-environment = { LDFLAGS = "-static-libstdc++ -static-libgcc" }
-
-[[tool.cibuildwheel.overrides]]
-select = "*-musllinux_s390x"
-build-frontend = "pip"
+before-build =[
+  'yum install zip -y || apk add zip || true',
+  'pip install cmake ninja',
+  'cmake --version', 'git --version', 'ninja --version',
+]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
