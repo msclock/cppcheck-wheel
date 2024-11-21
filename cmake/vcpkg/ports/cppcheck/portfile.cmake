@@ -15,10 +15,16 @@ vcpkg_replace_string("${SOURCE_PATH}/cmake/compilerDefinitions.cmake"
   [[]]
 )
 
+vcpkg_check_features(
+    OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+    FEATURES
+        have_rules                  HAVE_RULES
+)
+
 vcpkg_cmake_configure(
   SOURCE_PATH "${SOURCE_PATH}"
   OPTIONS
-    -DHAVE_RULES=ON
+    ${FEATURE_OPTIONS}
 )
 
 vcpkg_cmake_install()

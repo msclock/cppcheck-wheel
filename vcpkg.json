@@ -5,7 +5,12 @@
   "builtin-baseline": "7adc2e4d49e8d0efc07a369079faa6bc3dbb90f3",
   "homepage": "https://github.com/msclock/cppcheck-wheel",
   "dependencies": [
-    "cppcheck",
+    {
+      "name": "cppcheck",
+      "features": [
+        "have-rules"
+      ]
+    },
     "cmake-modules",
     "robotology-cmake-ycm"
   ],
