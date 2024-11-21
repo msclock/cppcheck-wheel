@@ -15,7 +15,11 @@ vcpkg_replace_string("${SOURCE_PATH}/cmake/compilerDefinitions.cmake"
   [[]]
 )
 
-vcpkg_cmake_configure(SOURCE_PATH "${SOURCE_PATH}")
+vcpkg_cmake_configure(
+  SOURCE_PATH "${SOURCE_PATH}"
+  OPTIONS
+    -DHAVE_REULES=ON
+)
 
 vcpkg_cmake_install()
 vcpkg_copy_pdbs()
