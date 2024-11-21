@@ -5,6 +5,7 @@
   "homepage": "https://github.com/danmar/cppcheck",
   "license": "GPL-3.0",
   "dependencies": [
+    "pcre",
     {
       "name": "vcpkg-cmake",
       "host": true
@@ -12,6 +13,13 @@
     {
       "name": "vcpkg-cmake-config",
       "host": true
+    }
+  ],
+  "overrides": [
+    {
+      "name": "pcre",
+      "version": "8.45",
+      "port-version": 6
     }
   ]
 }
