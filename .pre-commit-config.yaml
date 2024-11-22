@@ -37,14 +37,6 @@ repos:
       - id: requirements-txt-fixer
       - id: trailing-whitespace
 
-  # Check RST
-  - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.10.0
-    hooks:
-      - id: rst-backticks
-      - id: rst-directive-colons
-      - id: rst-inline-touching-normal
-
   # Strong lint from ruff
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.1.14
@@ -62,6 +54,7 @@ repos:
         args: []
         additional_dependencies:
           - pytest
+          - importlib_metadata
 
   # Check yaml
   - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks

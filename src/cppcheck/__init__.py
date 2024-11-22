@@ -15,14 +15,11 @@ import sys
 from pathlib import Path
 from typing import Iterable
 
+from importlib_metadata import distribution
+
 from ._version import version as __version__
 
 __all__ = ["__version__", "cppcheck"]
-
-if sys.version_info < (3, 8):
-    from importlib_metadata import distribution
-else:
-    from importlib.metadata import distribution
 
 
 @functools.lru_cache(maxsize=None)
@@ -31,7 +28,7 @@ def _get_cppcheck() -> Path:
     assert package_files is not None, f"There must exist {__package__} files"
     for file in package_files:
         if str(file).startswith(f"{__package__}/Cppcheck"):
-            resolved_file = Path(file.locate()).resolve(strict=True)
+            resolved_file = Path(str(file.locate())).resolve(strict=True)
             cppcheck_path = resolved_file.parents[1]
             if cppcheck_path.exists():
                 return cppcheck_path
