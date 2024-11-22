@@ -17,7 +17,7 @@ vcpkg_replace_string("${SOURCE_PATH}/cmake/compilerDefinitions.cmake"
 
 vcpkg_check_features(
     OUT_FEATURE_OPTIONS FEATURE_OPTIONS
-    FEATURES
+    INVERTED_FEATURES
         have_rules                  HAVE_RULES
 )
 
