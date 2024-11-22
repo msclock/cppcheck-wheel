@@ -76,10 +76,11 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           echo "Checking architecture..."
-          if [[ ${{ matrix.arch }} == 'aarch64' ||
-                ${{ matrix.arch }} == 'ppc64le' ||
-                ${{ matrix.arch }} == 's390x' ]]; then
-            echo "Setting CIBW_ENVIRONMENT to 1"
+          if [[ ${{ matrix.arch }} == "aarch64" ||
+                ${{ matrix.arch }} == "ppc64le" ||
+                ${{ matrix.arch }} == "s390x"   ||
+                ${{ matrix.arch }} == *"arm"* ]]; then
+            echo "Set VCPKG_FORCE_SYSTEM_BINARIES=1"
             echo "CIBW_ENVIRONMENT=VCPKG_FORCE_SYSTEM_BINARIES=1" >> $GITHUB_ENV
           fi
 
