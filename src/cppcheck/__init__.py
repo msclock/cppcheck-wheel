@@ -14,12 +14,12 @@ import subprocess
 import sys
 from pathlib import Path
 from typing import Iterable
+
 from importlib_metadata import distribution
 
 from ._version import version as __version__
 
 __all__ = ["__version__", "cppcheck"]
-
 
 
 @functools.lru_cache(maxsize=None)
