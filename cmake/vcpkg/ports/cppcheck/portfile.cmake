@@ -15,6 +15,13 @@ vcpkg_replace_string("${SOURCE_PATH}/cmake/compilerDefinitions.cmake"
   [[]]
 )
 
+if(VCPKG_TARGET_IS_LINUX)
+    if(VCPKG_TARGET_ARCHITECTURE STREQUAL "x86" OR VCPKG_TARGET_ARCHITECTURE STREQUAL "x64")
+      message(STATUS "Disable automatic elf rpath fixup for ${VCPKG_TARGET_ARCHITECTURE} linux")
+      set(VCPKG_FIXUP_ELF_RPATH OFF)
+    endif()
+endif()
+
 vcpkg_check_features(
     OUT_FEATURE_OPTIONS FEATURE_OPTIONS
     FEATURES
