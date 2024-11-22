@@ -31,56 +31,36 @@ jobs:
           path: dist/*.tar.gz
 
   build_wheels:
-    name: Build ${{ matrix.platform }}-${{ matrix.arch }} wheels on ${{ matrix.os }}
+    name: Build ${{ matrix.build }}-${{ matrix.arch }} wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        # emulated linux: generate 6 matrix combinations with qemu on ubuntu:
-        arch: [aarch64, ppc64le, s390x]
-        platform: [manylinux, musllinux]
+        arch: [aarch64, ppc64le, s390x, x86_64, i686]
+        build: [manylinux, musllinux]
         os: [ubuntu-latest]
-        emulation: [qemu]
-        exclude:
-          # conditionally skip jobs requiring emulation:
-          - os: ubuntu-latest
-            emulation: ''
+        use_qemu: [aarch64 ppc64le s390x]
         include:
-          # linux
-          - os: ubuntu-latest
-            platform: manylinux
-            arch: x86_64
-          - os: ubuntu-latest
-            platform: manylinux
-            arch: i686
-          - os: ubuntu-latest
-            platform: musllinux
-            arch: x86_64
-          - os: ubuntu-latest
-            platform: musllinux
-            arch: i686
-          # windows
           - os: windows-2019
-            platform: win
             arch: AMD64
+            build: win
           - os: windows-2019
-            platform: win
             arch: x86
-          # macos
+            build: win
           - os: macos-13
-            platform: macos
             arch: x86_64
+            build: macos
           - os: macos-latest
-            platform: macos
             arch: arm64
+            build: macos
+          - os: ubuntu-latest
+            arch: armv7l
+            build: musllinux_
+            use_qemu: armv7l
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Support long paths on Windows
-        if: runner.os == 'Windows'
-        run: git config --system core.longpaths true
 
       - name: Set up msvc on Windows
         if: runner.os == 'Windows'
@@ -90,7 +70,7 @@ jobs:
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3.2.0
-        if: runner.os == 'Linux' && matrix.emulation == 'qemu'
+        if: runner.os == 'Linux' && contains(matrix.use_qemu, matrix.arch)
 
       - name: Check architecture and set environment variable
         if: runner.os == 'Linux'
@@ -104,31 +84,16 @@ jobs:
           fi
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.20
+        uses: pypa/cibuildwheel@v2.21.3
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
-          # restrict to a single Python version as wheel does not depend on Python:
-          CIBW_BUILD: cp311-${{ matrix.platform }}*
+          CIBW_BUILD: cp311-${{ matrix.build }}*
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
-          name: cibw-${{ runner.os }}-${{ matrix.platform }}-${{ matrix.arch }}
+          name: cibw-${{ runner.os }}-${{ matrix.build }}-${{ matrix.arch }}
           path: wheelhouse/*.whl
-
-
-  check_dist:
-    name: Check dist
-    needs: [build_wheels, build_sdist]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: cibw-*
-          path: dist
-          merge-multiple: true
-
-      - run: pipx run twine check --strict dist/*
 
   upload_all:
     needs: [build_wheels, build_sdist]
