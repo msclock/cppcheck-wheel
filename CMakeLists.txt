@@ -26,6 +26,9 @@ set(CMAKE_CXX_EXTENSIONS
     OFF
     CACHE BOOL "C++ extensions")
 
+find_package(cmake-modules REQUIRED)
+include(cmake-modules/ProjectDefault)
+
 find_program(cppcheck NAMES "cppcheck" "cppcheck.exe")
 
 install(PROGRAMS ${cppcheck} DESTINATION ${SKBUILD_PROJECT_NAME}/Cppcheck)
