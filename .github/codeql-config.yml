@@ -1,11 +1,6 @@
 name: CodeQL config
 
+# https://codeql.github.com/codeql-query-help/
 query-filters:
   - exclude:
-      id: cpp/commented-out-code
-  - exclude:
-      id: cpp/include-non-header
-  - exclude:
-      id: cpp/loop-variable-changed
-  - exclude:
-      id: cpp/useless-expression
+      id: py/commented-out-code
