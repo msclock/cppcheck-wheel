@@ -47,6 +47,9 @@ jobs:
           - os: windows-2019
             arch: x86
             build: win
+          - os: windows-2022
+            arch: ARM64
+            build: win
           - os: macos-13
             arch: x86_64
             build: macos
