@@ -55,7 +55,7 @@ jobs:
             build: macos
           - os: ubuntu-latest
             arch: armv7l
-            build: musllinux_
+            build: musllinux
             use_qemu: armv7l
     steps:
       - uses: actions/checkout@v4
