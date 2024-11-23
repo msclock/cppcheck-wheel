@@ -26,19 +26,6 @@ set(CMAKE_CXX_EXTENSIONS
     OFF
     CACHE BOOL "C++ extensions")
 
-# Source includes from vcpkg
-include_directories(${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/include)
-
-# From https://github.com/msclock/cmake-registry.
-find_package(cmake-modules REQUIRED)
-include(cmake-modules/ProjectDefault)
-
-# Project custom modules
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-include(ConfigureWarningsAndHardening)
-
-add_subdirectory(src)
-
 find_program(cppcheck NAMES "cppcheck" "cppcheck.exe")
 
 install(PROGRAMS ${cppcheck} DESTINATION ${SKBUILD_PROJECT_NAME}/Cppcheck)
