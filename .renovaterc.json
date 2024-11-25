@@ -10,9 +10,17 @@
   "platformAutomerge": true,
   "packageRules": [
     {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
       "description": "Group renovate docker tag and pre-commit-hooks tag",
       "groupName": "renovate group",
-      "extends": ["schedule:automergeMonthly"],
       "addLabels": [
         "auto-approval",
         "renovate"
@@ -21,14 +29,13 @@
         "docker",
         "github-tags"
       ],
-      "automerge": true,
       "matchDepNames": [
         "ghcr.io/renovatebot/renovate",
         "renovatebot/pre-commit-hooks"
       ]
     },
     {
-      "commitMessageTopic": "serious-scaffold-cpp",
+      "commitMessageTopic": "serious-scaffold",
       "matchDepTypes": [
         "copier-template"
       ],
