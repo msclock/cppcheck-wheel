@@ -78,7 +78,24 @@ function(_vcpkg_tool_bootstrap vcpkg_root)
     RESULT_VARIABLE result)
 
   if(NOT result EQUAL "0")
-    message(FATAL_ERROR "${bootstrap_cmd} failed with ${result}")
+    if(CMAKE_HOST_UNIX)
+      message(STATUS "Retry to build vcpkg from source...")
+      set(bootstrap_impl "${vcpkg_root}/scripts/bootstrap.sh")
+      file(READ "${bootstrap_impl}" file_contents)
+      string(REPLACE [[elif [ "$ARCH" = "x86_64" ]; then]]
+                     [[elif [ "$ARCH" = "" ]; then]] file_contents
+                     "${file_contents}")
+      file(WRITE "${bootstrap_impl}" "${file_contents}")
+
+      execute_process(
+        COMMAND ${bootstrap_cmd} -disableMetrics
+        WORKING_DIRECTORY ${vcpkg_root}
+        RESULT_VARIABLE result)
+    endif()
+
+    if(NOT result EQUAL "0")
+      message(FATAL_ERROR "${bootstrap_cmd} failed with ${result}")
+    endif()
   endif()
 endfunction()
 
