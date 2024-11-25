@@ -82,7 +82,8 @@ test-skip = ["*-win_arm64", "*-macosx_universal2:arm64"]
 
 [tool.cibuildwheel.linux]
 before-build =[
-  'yum install zip -y || apt-get install zip -y || apk add zip || true',
+  'yum install zip -y || apk add zip || true',
+  'apt update && apt install zip -y || true',
   'pip install cmake ninja',
   'cmake --version', 'git --version', 'ninja --version',
 ]
