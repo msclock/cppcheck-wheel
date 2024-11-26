@@ -40,13 +40,13 @@ jobs:
           echo "# :warning: GITHUB_TOKEN is used" >> $GITHUB_STEP_SUMMARY
           echo "The GITHUB_TOKEN is used instead of a bot token or PAT that will not emit the released publish event for triggering a released workflow." >> $GITHUB_STEP_SUMMARY
 
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
           token: ${{ steps.bot_token.outputs.token || secrets.PAT || secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@1e60f620b9541d16bece96c5465dc8ee9832be0b # v4
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
         with:
           node-version: lts/*
 

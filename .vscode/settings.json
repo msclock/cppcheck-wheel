@@ -4,12 +4,6 @@
   "python.testing.pytestEnabled": true,
   "cmake.useCMakePresets": "always",
   "cmake.options.statusBarVisibility": "compact",
-  "files.exclude": {
-    "**/.clangd/**": true
-  },
-  "files.watcherExclude": {
-    "**/.clangd/**": true
-  },
   "files.associations": {
     "iosfwd": "cpp",
     "type_traits": "cpp",

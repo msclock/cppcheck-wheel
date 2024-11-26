@@ -18,117 +18,83 @@ jobs:
     name: Build SDist
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
       - name: Build SDist
         run: pipx run build --sdist
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
           name: cibw-sdist
           path: dist/*.tar.gz
 
   build_wheels:
-    name: Build ${{ matrix.platform }}-${{ matrix.arch }} wheels on ${{ matrix.os }}
+    name: Build ${{ matrix.build }}-${{ matrix.arch }} wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        # emulated linux: generate 6 matrix combinations with qemu on ubuntu:
-        arch: [aarch64, ppc64le, s390x]
-        platform: [manylinux, musllinux]
+        arch: [aarch64, ppc64le, s390x, armv7l, x86_64, i686]
+        build: [manylinux, musllinux]
         os: [ubuntu-latest]
-        emulation: [qemu]
-        exclude:
-          # conditionally skip jobs requiring emulation:
-          - os: ubuntu-latest
-            emulation: ''
+        use_qemu: [aarch64 ppc64le s390x armv7l]
         include:
-          # linux
-          - os: ubuntu-latest
-            platform: manylinux
-            arch: x86_64
-          - os: ubuntu-latest
-            platform: manylinux
-            arch: i686
-          - os: ubuntu-latest
-            platform: musllinux
-            arch: x86_64
-          - os: ubuntu-latest
-            platform: musllinux
-            arch: i686
-          # windows
           - os: windows-2019
-            platform: win
             arch: AMD64
+            build: win
           - os: windows-2019
-            platform: win
             arch: x86
-          # macos
+            build: win
+          - os: windows-2022
+            arch: ARM64
+            build: win
           - os: macos-13
-            platform: macos
             arch: x86_64
+            build: macos
           - os: macos-latest
-            platform: macos
             arch: arm64
+            build: macos
+
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
-      - name: Support long paths on Windows
-        if: runner.os == 'Windows'
-        run: git config --system core.longpaths true
-
       - name: Set up msvc on Windows
         if: runner.os == 'Windows'
-        uses: ilammy/msvc-dev-cmd@v1
+        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1
         with:
           arch: ${{ matrix.arch }}
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3.2.0
-        if: runner.os == 'Linux' && matrix.emulation == 'qemu'
+        uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3.2.0
+        if: runner.os == 'Linux' && contains(matrix.use_qemu, matrix.arch)
 
       - name: Check architecture and set environment variable
         if: runner.os == 'Linux'
         run: |
           echo "Checking architecture..."
-          if [[ ${{ matrix.arch }} == 'aarch64' ||
-                ${{ matrix.arch }} == 'ppc64le' ||
-                ${{ matrix.arch }} == 's390x' ]]; then
-            echo "Setting CIBW_ENVIRONMENT to 1"
+          if [[ ${{ matrix.arch }} == "aarch64" ||
+                ${{ matrix.arch }} == "ppc64le" ||
+                ${{ matrix.arch }} == "s390x"   ||
+                ${{ matrix.arch }} == *"arm"* ]]; then
+            echo "Set VCPKG_FORCE_SYSTEM_BINARIES=1"
             echo "CIBW_ENVIRONMENT=VCPKG_FORCE_SYSTEM_BINARIES=1" >> $GITHUB_ENV
           fi
 
       - name: Build wheels
-        uses: pypa/cibuildwheel@v2.20
+        uses: pypa/cibuildwheel@ee63bf16da6cddfb925f542f2c7b59ad50e93969 # v2.22.0
         env:
           CIBW_ARCHS: ${{ matrix.arch }}
-          # restrict to a single Python version as wheel does not depend on Python:
-          CIBW_BUILD: cp311-${{ matrix.platform }}*
+          CIBW_BUILD: cp311-${{ matrix.build }}*
 
       - name: Upload wheels
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         with:
-          name: cibw-${{ runner.os }}-${{ matrix.platform }}-${{ matrix.arch }}
+          name: cibw-${{ runner.os }}-${{ matrix.build }}-${{ matrix.arch }}
           path: wheelhouse/*.whl
-
-
-  check_dist:
-    name: Check dist
-    needs: [build_wheels, build_sdist]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: cibw-*
-          path: dist
-          merge-multiple: true
-
-      - run: pipx run twine check --strict dist/*
 
   upload_all:
     needs: [build_wheels, build_sdist]
@@ -139,7 +105,7 @@ jobs:
     if: github.event_name == 'release' && github.event.action == 'published'
 
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
         with:
           pattern: cibw-*
           path: dist
@@ -161,7 +127,7 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.head_ref }}
@@ -176,7 +142,7 @@ jobs:
           key: cd-pages-${{ hashFiles('vcpkg.json') }}
           restore-keys: cd-pages-${{ hashFiles('vcpkg.json') }}
 
-      - uses: actions/setup-python@f677139bbe7f9c59b41e40162b753c062f5d49a3 # v5
+      - uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5
         with:
           python-version: 3.x
 
