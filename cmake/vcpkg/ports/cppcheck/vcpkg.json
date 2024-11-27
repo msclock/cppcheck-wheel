@@ -17,7 +17,6 @@
   "features": {
     "have-rules": {
       "description": "To compile with rules",
-      "supports": "((x86 | x64) & linux) | windows",
       "dependencies": [
         "pcre"
       ]
