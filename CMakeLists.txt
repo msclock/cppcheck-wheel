@@ -10,7 +10,6 @@ message(
   STATUS
     "Building CMake project ${SKBUILD_PROJECT_NAME} ${SKBUILD_PROJECT_VERSION}")
 
-# Project settings
 project(
   ${SKBUILD_PROJECT_NAME}
   VERSION ${SKBUILD_PROJECT_VERSION}
@@ -26,6 +25,7 @@ set(CMAKE_CXX_EXTENSIONS
     OFF
     CACHE BOOL "C++ extensions")
 
+# Project default module
 find_package(cmake-modules REQUIRED)
 include(cmake-modules/ProjectDefault)
 

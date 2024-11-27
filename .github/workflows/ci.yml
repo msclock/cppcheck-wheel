@@ -77,7 +77,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install package
-        run: python -m pip install .[test]
+        run: python -m pip install .[test] -v
 
       - name: Test package
         run: >-
@@ -86,6 +86,7 @@ jobs:
 
       - name: Upload coverage report
         uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457 # v3.1.6
+
 
   check-docs:
     runs-on: ubuntu-22.04
@@ -116,6 +117,7 @@ jobs:
 
       - name: Checks the docs for broken links
         run: pipx run nox -s docs -- --linkcheck
+
 
   pass:
     if: always()
