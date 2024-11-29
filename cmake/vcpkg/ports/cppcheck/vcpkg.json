@@ -16,8 +16,10 @@
   ],
   "features": {
     "have-rules": {
-      "description": "Dependencies for testing",
-      "supports": "!windows | !osx"
+      "description": "To compile with rules",
+      "dependencies": [
+        "pcre"
+      ]
     }
   }
 }
