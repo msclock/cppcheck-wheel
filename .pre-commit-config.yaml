@@ -15,7 +15,8 @@
 fail_fast: false
 exclude: |
   (?x)(
-    ^(.vscode/.*)
+    ^(.vscode/.*) |
+    ^(cmake/vcpkg/ports/.*)
   )
 files: '' # set '' as default
 
