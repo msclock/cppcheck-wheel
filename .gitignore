@@ -344,7 +344,7 @@ Thumbs.db
 *~
 *.swp
 
-# Build output for this sample
+# Build output
 *.out
 /out
 dist

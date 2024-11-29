@@ -50,15 +50,15 @@ docs = [
 cppcheck = "cppcheck:cppcheck"
 
 [project.urls]
-Homepage = "https://github.com/serious-scaffold/cppcheck-wheel"
-"Bug Tracker" = "https://github.com/serious-scaffold/cppcheck-wheel/issues"
-Discussions = "https://github.com/serious-scaffold/cppcheck-wheel/discussions"
-Changelog = "https://github.com/serious-scaffold/cppcheck-wheel/releases"
+Homepage = "https://github.com/msclock/cppcheck-wheel"
+"Bug Tracker" = "https://github.com/msclock/cppcheck-wheel/issues"
+Discussions = "https://github.com/msclock/cppcheck-wheel/discussions"
+Changelog = "https://github.com/msclock/cppcheck-wheel/releases"
 
 [tool.scikit-build]
 minimum-version = "0.9"
 build-dir = "build/{wheel_tag}"
-cmake.verbose = true
+cmake.verbose = false
 logging.level = "DEBUG"
 wheel.py-api = "py3"
 wheel.expand-macos-universal-tags = true
@@ -66,6 +66,7 @@ metadata.version.provider = "scikit_build_core.metadata.setuptools_scm"
 sdist.include = ["src/cppcheck/_version.py"]
 cmake.args = [
   "-DBUILD_TESTING=OFF",
+  "-DCMAKE_BUILD_TYPE=ReWithDebInfo", # Required RelWithDebInfo or Release
   "-DCMAKE_TOOLCHAIN_FILE=cmake/vcpkg/vcpkg.toolchain.cmake",
   "-DVCPKG_OVERLAY_TRIPLETS=cmake/vcpkg/triplets",
   "-DVCPKG_OVERLAY_PORTS=cmake/vcpkg/ports"
@@ -158,7 +159,6 @@ isort.required-imports = ["from __future__ import annotations"]
 [tool.pylint]
 py-version = "3.8"
 ignore-paths = [".*/_version.py"]
-extension-pkg-allow-list = ["cppcheck._core"]
 reports.output-format = "colorized"
 similarities.ignore-imports = "yes"
 messages_control.disable = [

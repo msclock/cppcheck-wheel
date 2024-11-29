@@ -61,6 +61,7 @@ exclude_patterns = [
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder
 linkcheck_ignore = [
     "https://github.com/msclock/cppcheck-wheel",
+    "https://msclock.github.io/cppcheck-wheel",
     "https://codecov.io/gh/msclock/cppcheck-wheel",
     "https://github.com/serious-scaffold/ss-pybind11",
 ]
