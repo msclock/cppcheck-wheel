@@ -72,18 +72,6 @@ jobs:
         uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3.2.0
         if: runner.os == 'Linux' && contains(matrix.use_qemu, matrix.arch)
 
-      - name: Check architecture and set environment variable
-        if: runner.os == 'Linux'
-        run: |
-          echo "Checking architecture..."
-          if [[ ${{ matrix.arch }} == "aarch64" ||
-                ${{ matrix.arch }} == "ppc64le" ||
-                ${{ matrix.arch }} == "s390x"   ||
-                ${{ matrix.arch }} == *"arm"* ]]; then
-            echo "Set VCPKG_FORCE_SYSTEM_BINARIES=1"
-            echo "CIBW_ENVIRONMENT=VCPKG_FORCE_SYSTEM_BINARIES=1" >> $GITHUB_ENV
-          fi
-
       - name: Build wheels
         uses: pypa/cibuildwheel@ee63bf16da6cddfb925f542f2c7b59ad50e93969 # v2.22.0
         env:
