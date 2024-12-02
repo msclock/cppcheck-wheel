@@ -21,7 +21,7 @@ jobs:
         RENOVATE_REPOSITORY_CACHE: enabled
       image: ghcr.io/renovatebot/renovate:39.43.0@sha256:eec02425b9b16428ad16f0a50ec207b346eff17193cec3c891ff00fb261964e0
       options: --user root
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - run: env | sort
 
