@@ -13,7 +13,10 @@ Package cppcheck as a python wheel.
 [![Renovate](https://github.com/msclock/cppcheck-wheel/actions/workflows/renovate.yml/badge.svg)](https://github.com/msclock/cppcheck-wheel/actions/workflows/renovate.yml)
 [![Semantic Release](https://github.com/msclock/cppcheck-wheel/actions/workflows/semantic-release.yml/badge.svg)](https://github.com/msclock/cppcheck-wheel/actions/workflows/semantic-release.yml)
 [![codecov](https://codecov.io/gh/msclock/cppcheck-wheel/branch/master/graph/badge.svg?token=123456789)](https://codecov.io/gh/msclock/cppcheck-wheel)
+
 [![Release](https://img.shields.io/github/v/release/msclock/cppcheck-wheel)](https://github.com/msclock/cppcheck-wheel/releases)
+[![PyPI](https://img.shields.io/pypi/v/cppcheck)](https://pypi.org/project/cppcheck/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/cppcheck)](https://pypi.org/project/cppcheck/)
 
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 [![cmake-format](https://img.shields.io/badge/cmake--format-enabled-blue)](https://github.com/cheshirekow/cmake-format-precommit)
