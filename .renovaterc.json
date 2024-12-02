@@ -42,10 +42,9 @@
       "postUpgradeTasks": {
         "commands": [
           "apt update",
-          "apt install python3-pip -y",
+          "apt install pipx -y",
           "git stash",
-          "pip install copier==9.4.1",
-          "copier update --defaults --vcs-ref {{{newVersion}}}"
+          "pipx run copier==9.4.1 copier update --defaults --vcs-ref {{{newVersion}}}"
         ]
       },
       "semanticCommitScope": "ss-template"
