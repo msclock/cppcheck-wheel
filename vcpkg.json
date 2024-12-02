@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "cppcheck-wheel",
   "description": "Package cppcheck as a python wheel.",
-  "builtin-baseline": "cd124b84feb0c02a24a2d90981e8358fdee0e077",
+  "builtin-baseline": "d2b6159679a36b233b0c31bdf027a57c2bf480db",
   "homepage": "https://github.com/msclock/cppcheck-wheel",
   "dependencies": [
     {
