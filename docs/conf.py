@@ -22,8 +22,8 @@ ROOT = Path(__file__).parent.parent.resolve()
 # -- Project information -----------------------------------------------------
 
 project = "Cppcheck Wheel"
-copyright = "2024 msclock"
-author = "msclock"
+copyright = "2024 l.feng"
+author = "l.feng"
 
 # -- General configuration ---------------------------------------------------
 

@@ -1,9 +1,8 @@
 """
-Copyright (c) 2024 msclock. All rights reserved.
+Copyright (c) 2024 l.feng. All rights reserved.
 
 cppcheck-wheel: Package cppcheck as a python wheel.
 """
-
 
 from __future__ import annotations
 
