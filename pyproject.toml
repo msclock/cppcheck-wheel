@@ -7,7 +7,7 @@ name = "cppcheck"
 description = "Package cppcheck as a python wheel."
 readme = "README.md"
 license = { text = "Apache-2.0" }
-authors = [{ email = "msclock@126.com", name = "msclock" }]
+authors = [{ email = "msclock@126.com", name = "l.feng" }]
 requires-python = ">=3.7"
 classifiers = [
   "Intended Audience :: Science/Research",
