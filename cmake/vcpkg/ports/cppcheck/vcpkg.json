@@ -1,6 +1,6 @@
 {
   "name": "cppcheck",
-  "version": "2.16.0",
+  "version": "2.16.1",
   "description": "static analysis of C/C++ code",
   "homepage": "https://github.com/danmar/cppcheck",
   "license": "GPL-3.0",
