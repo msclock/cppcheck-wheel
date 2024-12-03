@@ -16,6 +16,104 @@
         "digest"
       ],
       "automerge": true
+<<<<<<< before updating
+=======
+    },
+    {
+      "description": "Group renovate docker tag and pre-commit-hooks tag",
+      "groupName": "renovate group",
+      "addLabels": [
+        "auto-approval",
+        "renovate"
+      ],
+      "matchDatasources": [
+        "docker",
+        "github-tags"
+      ],
+      "matchDepNames": [
+        "ghcr.io/renovatebot/renovate",
+        "renovatebot/pre-commit-hooks"
+      ]
+    },
+    {
+      "commitMessageTopic": "serious-scaffold",
+      "matchDepTypes": [
+        "ss-template"
+      ],
+      "postUpgradeTasks": {
+        "commands": [
+          "git stash",
+          "apt update",
+          "apt install python3-pip -y",
+          "pip install copier==9.4.1 --break-system-packages",
+          "copier update --defaults --vcs-ref {{{newVersion}}}"
+        ]
+      },
+      "semanticCommitScope": "ss-template"
+    },
+    {
+      "description": "Group apt packages to avoid failure when multiple packages are outdated.",
+      "groupName": "apt packages",
+      "matchDepTypes": [
+        "apt"
+      ]
+    }
+  ],
+  "customManagers": [
+    {
+      "description": "Update python packages installed with pip or pipx",
+      "customType": "regex",
+      "datasourceTemplate": "pypi",
+      "fileMatch": [
+        "^\\.github/workflows/.+\\.yml$",
+        "^\\.renovaterc\\.json$",
+        "^Makefile$"
+      ],
+      "matchStrings": [
+        "pipx? install.* (?<depName>.*?)==(?<currentValue>.*?)[\\s\";]"
+      ]
+    },
+    {
+      "description": " Update vcpkg.json builtin-baseline with git hash",
+      "customType": "regex",
+      "currentValueTemplate": "master",
+      "datasourceTemplate": "git-refs",
+      "depNameTemplate": "https://github.com/microsoft/vcpkg",
+      "depTypeTemplate": "vcpkg-builtin-baseline",
+      "fileMatch": [
+        "^vcpkg\\.json$"
+      ],
+      "matchStrings": [
+        "\"builtin-baseline\": \"(?<currentDigest>.*?)\""
+      ]
+    },
+    {
+      "description": "Update registration baseline with git hash",
+      "customType": "regex",
+      "currentValueTemplate": "master",
+      "datasourceTemplate": "git-refs",
+      "depTypeTemplate": "registration-baseline",
+      "fileMatch": [
+        "^vcpkg\\.json$"
+      ],
+      "matchStrings": [
+        "\"baseline\": \"(?<currentDigest>.*?)\"[^}]+?\"repository\": \"(?<depName>.*?)\""
+      ]
+    },
+    {
+      "description": "Update ss template from serious-scaffold",
+      "customType": "regex",
+      "datasourceTemplate": "git-tags",
+      "depNameTemplate": "https://github.com/serious-scaffold/ss-pybind11.git",
+      "depTypeTemplate": "ss-template",
+      "fileMatch": [
+        "^\\.copier-answers\\.yml$"
+      ],
+      "matchStrings": [
+        "_commit: (?<currentValue>.*?)\n"
+      ],
+      "versioningTemplate": "semver"
+>>>>>>> after updating
     }
   ]
 }
