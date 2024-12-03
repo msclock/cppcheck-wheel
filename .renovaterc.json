@@ -35,22 +35,6 @@
       ]
     },
     {
-      "commitMessageTopic": "serious-scaffold",
-      "matchDepTypes": [
-        "ss-template"
-      ],
-      "postUpgradeTasks": {
-        "commands": [
-          "git stash",
-          "apt update",
-          "apt install python3-pip -y",
-          "pip install copier==9.4.1 --break-system-packages",
-          "copier update --defaults --vcs-ref {{{newVersion}}}"
-        ]
-      },
-      "semanticCommitScope": "ss-template"
-    },
-    {
       "description": "Group apt packages to avoid failure when multiple packages are outdated.",
       "groupName": "apt packages",
       "matchDepTypes": [
@@ -110,20 +94,6 @@
       "matchStrings": [
         "\"baseline\": \"(?<currentDigest>.*?)\"[^}]+?\"repository\": \"(?<depName>.*?)\""
       ]
-    },
-    {
-      "description": "Update ss template from serious-scaffold",
-      "customType": "regex",
-      "datasourceTemplate": "git-tags",
-      "depNameTemplate": "https://github.com/serious-scaffold/ss-pybind11.git",
-      "depTypeTemplate": "ss-template",
-      "fileMatch": [
-        "^\\.copier-answers\\.yml$"
-      ],
-      "matchStrings": [
-        "_commit: (?<currentValue>.*?)\n"
-      ],
-      "versioningTemplate": "semver"
     },
     {
       "description": "Update cppcheck",
