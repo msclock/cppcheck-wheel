@@ -63,6 +63,22 @@
       ]
     },
     {
+      "customType": "regex",
+      "datasourceTemplate": "github-runners",
+      "depTypeTemplate": "github-runner",
+      "description": "Match GitHub runner defined in GitHub Actions matrix strategy",
+      "fileMatch": [
+        "^\\.github/workflows/.+\\.yml$",
+        "^template/.*\\.github.*/workflows/.+\\.yml(\\.jinja)?$"
+      ],
+      "matchStringsStrategy": "recursive",
+      "matchStrings": [
+        "[-:] (.*) # renovate: github-runner",
+        "(?<depName>ubuntu|windows|macos)-(?<currentValue>[\\d\\.\\-\\w]+)"
+      ],
+      "versioningTemplate": "docker"
+    },
+    {
       "description": "Update vcpkg.json builtin-baseline with git hash",
       "customType": "regex",
       "currentValueTemplate": "master",
