@@ -30,7 +30,8 @@ module.exports = {
           { type: "ci", release: false },
           { type: "docs", release: false },
           { type: "test", release: false },
-          { scope: '*no-release*', release: false },
+          { scope: "*no-release*", release: false },
+          { type: "chore", scope: "cppcheck", release: "patch" },
         ],
         parseOpts: {
           noteKeywords: ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
