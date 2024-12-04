@@ -7,7 +7,7 @@ env:
   FORCE_COLOR: 3
 
 jobs:
-  update-port:
+  verify:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
@@ -52,8 +52,8 @@ jobs:
         run: |
           set -x
           for dir in cmake/vcpkg/ports/* ; do
-            echo "Test to install $dir"
             if [[ ! -d $dir ]]; then continue; fi;
+            echo "Test to install $dir"
             vcpkg remove ${dir##cmake/vcpkg/ports/} --recurse --overlay-ports=cmake/vcpkg/ports --classic || true
             status=0
             install_output=$(vcpkg install ${dir##cmake/vcpkg/ports/} --overlay-ports=cmake/vcpkg/ports --classic) || status=$?
