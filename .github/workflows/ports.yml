@@ -1,0 +1,86 @@
+name: Ports
+
+on:
+  pull_request:
+
+env:
+  FORCE_COLOR: 3
+
+jobs:
+  update-port:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - name: Generate a bot token with BOT_APP_ID
+        id: bot_token
+        if: vars.BOT_APP_ID && env.BOT_PRIVATE_KEY != null
+        uses: actions/create-github-app-token@5d869da34e18e7287c1daad50e0b8ea0f506ce69 # v1
+        env:
+          BOT_PRIVATE_KEY: ${{ secrets.BOT_PRIVATE_KEY }}
+        with:
+          app-id: ${{ vars.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_PRIVATE_KEY }}
+
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          token: ${{ steps.bot_token.outputs.token || secrets.PAT || secrets.GITHUB_TOKEN }}
+          ref: ${{ github.head_ref }}
+          fetch-depth: 2
+
+      - name: Format vcpkg.json
+        run: |
+          vcpkg format-manifest --all $(find cmake/vcpkg/ports/ -name "vcpkg.json")
+
+      - name: Commit format vcpkg.json
+        uses: stefanzweifel/git-auto-commit-action@v5
+        if: success()
+        with:
+          commit_message: 'ci: format vcpkg configuration'
+          file_pattern: vcpkg.json
+
+      - name: Exit 1 if vcpkg configuration changes have been detected
+        if: steps.auto-commit-action.outputs.changes_detected == 'true'
+        run: |
+          exit 1
+
+      - name: Verify all modules and update hash
+        run: |
+          set -x
+          for dir in cmake/vcpkg/ports/* ; do
+            echo "Test to install $dir"
+            if [[ ! -d $dir ]]; then continue; fi;
+            vcpkg remove ${dir##cmake/vcpkg/ports/} --recurse --overlay-ports=cmake/vcpkg/ports --classic || true
+            status=0
+            install_output=$(vcpkg install ${dir##cmake/vcpkg/ports/} --overlay-ports=cmake/vcpkg/ports --classic) || status=$?
+            if [[ ! $status -eq 0 ]]; then
+              echo "  Update hash on $dir/portfile.cmake"
+              expected=$(echo "$install_output" | grep -oP "(?<=Expected hash: ).{128}")
+              actual=$(echo "$install_output" | grep -oP "(?<=Actual hash: ).{128}")
+              sed -i "s@${expected}@${actual}@g" "$dir/portfile.cmake"
+              echo "  Expected hash: ${expected}"
+              echo "  Actual hash: ${actual}"
+            fi
+          done
+
+      - name: Detect hash changes against local
+        id: filter-hash
+        uses: dorny/paths-filter@v3
+        with:
+          list-files: shell
+          base: HEAD
+          filters: |
+            ports:
+              - cmake/vcpkg/ports/**
+
+      - name: Commit port hash
+        if: steps.filter-hash.outputs.ports == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          file_pattern: cmake/vcpkg/ports/*
+          commit_message: 'ci: update port hash'
+          skip_fetch: true
