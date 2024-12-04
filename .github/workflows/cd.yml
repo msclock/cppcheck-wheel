@@ -38,7 +38,7 @@ jobs:
       matrix:
         arch: [aarch64, ppc64le, s390x, armv7l, x86_64, i686]
         build: [manylinux, musllinux]
-        os: [ubuntu-latest]
+        os: [ubuntu-24.04] # renovate: github-runner
         use_qemu: [aarch64 ppc64le s390x armv7l]
         include:
           - os: windows-2019
