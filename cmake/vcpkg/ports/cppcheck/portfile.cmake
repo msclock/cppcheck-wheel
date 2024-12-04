@@ -24,8 +24,8 @@ endif()
 
 vcpkg_check_features(
     OUT_FEATURE_OPTIONS FEATURE_OPTIONS
-    INVERTED_FEATURES
-        have_rules                  HAVE_RULES
+    FEATURES
+        have-rules                  HAVE_RULES
 )
 
 vcpkg_cmake_configure(
