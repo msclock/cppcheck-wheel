@@ -49,11 +49,11 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.8', '3.12']
-        runs-on: [ubuntu-22.04, macos-14, windows-2022] # renovate: github-runner
+        runs-on: [ubuntu-24.04, macos-14, windows-2022] # renovate: github-runner
 
         include:
           - python-version: pypy-3.10
-            runs-on: ubuntu-22.04 # renovate: github-runner
+            runs-on: ubuntu-24.04 # renovate: github-runner
 
     name: Check Python ${{ matrix.python-version }} on ${{ matrix.runs-on }}
 
@@ -136,5 +136,5 @@ jobs:
           jobs: ${{ toJSON(needs) }}
 
       - name: Approve pr if all jobs succeeded
-        if: contains(github.event.pull_request.labels.*.name, 'auto-approval')
+        if: contains(github.event.pull_request.labels.*.name, 'auto-approval') && contains(github.actor, '[bot]')
         uses: hmarr/auto-approve-action@v4
