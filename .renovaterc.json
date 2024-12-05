@@ -11,19 +11,25 @@
   "platformAutomerge": true,
   "packageRules": [
     {
+      "automerge": true,
+      "addLabels": [
+        "auto-approval"
+      ],
+      "extends": [
+        "schedule:earlyMondays",
+        "schedule:automergeMonthly"
+      ],
       "matchUpdateTypes": [
         "minor",
         "patch",
         "pin",
         "digest"
-      ],
-      "automerge": true
+      ]
     },
     {
       "description": "Group renovate docker tag and pre-commit-hooks tag",
       "groupName": "renovate group",
       "addLabels": [
-        "auto-approval",
         "renovate"
       ],
       "matchDatasources": [
@@ -79,12 +85,12 @@
       "versioningTemplate": "docker"
     },
     {
-      "description": "Update vcpkg.json builtin-baseline with git hash",
+      "description": "Update microsoft vcpkg baseline",
       "customType": "regex",
       "currentValueTemplate": "master",
       "datasourceTemplate": "git-refs",
       "depNameTemplate": "https://github.com/microsoft/vcpkg",
-      "depTypeTemplate": "vcpkg-builtin-baseline",
+      "depTypeTemplate": "vcpkg-baseline",
       "fileMatch": [
         "^vcpkg\\.json$"
       ],
@@ -93,11 +99,11 @@
       ]
     },
     {
-      "description": "Update registration baseline with git hash",
+      "description": "Update custom registry baseline",
       "customType": "regex",
       "currentValueTemplate": "master",
       "datasourceTemplate": "git-refs",
-      "depTypeTemplate": "registration-baseline",
+      "depTypeTemplate": "vcpkg-baseline",
       "fileMatch": [
         "^vcpkg\\.json$"
       ],
