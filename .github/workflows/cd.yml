@@ -36,7 +36,6 @@ jobs:
 
     strategy:
       matrix:
-<<<<<<< before updating
         arch: [aarch64, ppc64le, s390x, armv7l, x86_64, i686]
         build: [manylinux, musllinux]
         os: [ubuntu-24.04] # renovate: github-runner
@@ -57,9 +56,6 @@ jobs:
           - os: macos-latest
             arch: arm64
             build: macos
-=======
-        os: [ubuntu-24.04, windows-2022, macos-14] # renovate: github-runner
->>>>>>> after updating
 
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
