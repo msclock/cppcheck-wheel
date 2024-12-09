@@ -51,10 +51,6 @@ jobs:
         python-version: ['3.8', '3.12']
         runs-on: [ubuntu-24.04, macos-14, windows-2022] # renovate: github-runner
 
-        include:
-          - python-version: pypy-3.10
-            runs-on: ubuntu-24.04 # renovate: github-runner
-
     name: Check Python ${{ matrix.python-version }} on ${{ matrix.runs-on }}
 
     steps:
@@ -69,6 +65,7 @@ jobs:
             ~/vcpkg
             ~/.cache/pip
             ~/.cache/vcpkg
+            ~/AppData/Local/vcpkg
           key: ${{ matrix.python-version }}-${{ matrix.runs-on }}-${{ hashFiles('vcpkg.json') }}
           restore-keys: ${{ matrix.python-version }}-${{ matrix.runs-on }}-${{ hashFiles('vcpkg.json') }}
 

@@ -45,9 +45,8 @@ def tests(session: nox.Session) -> None:
 @nox.session(reuse_venv=True)
 def docs(session: nox.Session) -> None:
     """
-    Build the docs. Pass "--serve" to serve. Pass "-b linkcheck" to check links.
+    Build the docs. Pass "-- --help" to show helps.
     """
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--serve", action="store_true", help="Serve after building")
     parser.add_argument(
