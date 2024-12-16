@@ -2,6 +2,8 @@ name: CD
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * 5
   release:
     types:
       - published
@@ -30,7 +32,9 @@ jobs:
           name: cibw-sdist
           path: dist/*.tar.gz
 
+
   build_wheels:
+<<<<<<< before updating
     name: Build ${{ matrix.build }}-${{ matrix.arch }} wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
 
@@ -56,12 +60,27 @@ jobs:
           - os: macos-latest
             arch: arm64
             build: macos
+=======
+    uses: ./.github/workflows/reuseable_cibuildwheel.yml
+    secrets: inherit
+    with:
+      auto: true
+      extra: true
 
+>>>>>>> after updating
+
+  check_dist:
+    name: Check dist
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/download-artifact@v4
         with:
-          fetch-depth: 0
+          pattern: cibw-*
+          path: dist
+          merge-multiple: true
 
+<<<<<<< before updating
       - name: Set up msvc on Windows
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1
@@ -83,10 +102,16 @@ jobs:
         with:
           name: cibw-${{ runner.os }}-${{ matrix.build }}-${{ matrix.arch }}
           path: wheelhouse/*.whl
+=======
+      - run: pipx run twine check --strict dist/*
+
+>>>>>>> after updating
 
   upload_all:
-    needs: [build_wheels, build_sdist]
-    environment: pypi
+    needs: [build_wheels, build_sdist, check_dist]
+    environment:
+      name: pypi
+      url: https://pypi.org/project/cppcheck-wheel
     permissions:
       id-token: write
     runs-on: ubuntu-24.04
@@ -101,6 +126,6 @@ jobs:
 
       - uses: pypa/gh-action-pypi-publish@release/v1
         env:
-          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN  }}
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}

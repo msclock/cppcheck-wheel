@@ -61,8 +61,7 @@
       "datasourceTemplate": "pypi",
       "fileMatch": [
         "^\\.github/workflows/.+\\.yml$",
-        "^\\.renovaterc\\.json$",
-        "^Makefile$"
+        "^\\.renovaterc\\.json$"
       ],
       "matchStrings": [
         "pipx? install.* (?<depName>.*?)==(?<currentValue>.*?)[\\s\";]"
@@ -74,8 +73,7 @@
       "depTypeTemplate": "github-runner",
       "description": "Match GitHub runner defined in GitHub Actions matrix strategy",
       "fileMatch": [
-        "^\\.github/workflows/.+\\.yml$",
-        "^template/.*\\.github.*/workflows/.+\\.yml(\\.jinja)?$"
+        "^\\.github/workflows/.+\\.yml$"
       ],
       "matchStringsStrategy": "recursive",
       "matchStrings": [
