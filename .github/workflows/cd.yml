@@ -2,6 +2,8 @@ name: CD
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * 5
   release:
     types:
       - published
@@ -30,63 +32,34 @@ jobs:
           name: cibw-sdist
           path: dist/*.tar.gz
 
+
   build_wheels:
-    name: Build ${{ matrix.build }}-${{ matrix.arch }} wheels on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    uses: ./.github/workflows/reuseable_cibuildwheel.yml
+    secrets: inherit
+    with:
+      auto: true
+      extra: true
 
-    strategy:
-      matrix:
-        arch: [aarch64, ppc64le, s390x, armv7l, x86_64, i686]
-        build: [manylinux, musllinux]
-        os: [ubuntu-24.04] # renovate: github-runner
-        use_qemu: [aarch64 ppc64le s390x armv7l]
-        include:
-          - os: windows-2019
-            arch: AMD64
-            build: win
-          - os: windows-2019
-            arch: x86
-            build: win
-          - os: windows-2022
-            arch: ARM64
-            build: win
-          - os: macos-13
-            arch: x86_64
-            build: macos
-          - os: macos-latest
-            arch: arm64
-            build: macos
 
+  check_dist:
+    name: Check dist
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/download-artifact@v4
         with:
-          fetch-depth: 0
+          pattern: cibw-*
+          path: dist
+          merge-multiple: true
 
-      - name: Set up msvc on Windows
-        if: runner.os == 'Windows'
-        uses: ilammy/msvc-dev-cmd@0b201ec74fa43914dc39ae48a89fd1d8cb592756 # v1
-        with:
-          arch: ${{ matrix.arch }}
+      - run: pipx run twine check --strict dist/*
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3.2.0
-        if: runner.os == 'Linux' && contains(matrix.use_qemu, matrix.arch)
-
-      - name: Build wheels
-        uses: pypa/cibuildwheel@ee63bf16da6cddfb925f542f2c7b59ad50e93969 # v2.22.0
-        env:
-          CIBW_ARCHS: ${{ matrix.arch }}
-          CIBW_BUILD: cp311-${{ matrix.build }}*
-
-      - name: Upload wheels
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
-        with:
-          name: cibw-${{ runner.os }}-${{ matrix.build }}-${{ matrix.arch }}
-          path: wheelhouse/*.whl
 
   upload_all:
-    needs: [build_wheels, build_sdist]
-    environment: pypi
+    needs: [build_wheels, build_sdist, check_dist]
+    environment:
+      name: pypi
+      url: https://pypi.org/project/cppcheck-wheel
     permissions:
       id-token: write
     runs-on: ubuntu-24.04
@@ -101,6 +74,6 @@ jobs:
 
       - uses: pypa/gh-action-pypi-publish@release/v1
         env:
-          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN  }}
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}

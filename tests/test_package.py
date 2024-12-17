@@ -15,7 +15,7 @@ def test_version():
 
 def test_cppcheck_dir():
     output = subprocess.run(
-        [m.get_cppcheck_dir() / "cppcheck", "--version"],
+        [str(m.get_cppcheck_dir() / "cppcheck"), "--version"],
         capture_output=True,
         text=True,
         check=False,
