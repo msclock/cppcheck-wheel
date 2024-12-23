@@ -16,7 +16,7 @@
   "overrides": [
     {
       "name": "cppcheck",
-      "version": "2.16.1"
+      "version": "2.16.2"
     },
     {
       "name": "cmake-modules",
