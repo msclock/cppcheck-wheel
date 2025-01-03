@@ -3,7 +3,7 @@
   "name": "cppcheck-wheel",
   "description": "Package cppcheck as a python wheel.",
   "builtin-baseline": "4b6c50d962cc20aaa3ef457f8ba683b586263cfb",
-  "homepage": "https:///msclock/cppcheck-wheel",
+  "homepage": "https://github.com/msclock/cppcheck-wheel",
   "dependencies": [
     {
       "name": "cppcheck",
