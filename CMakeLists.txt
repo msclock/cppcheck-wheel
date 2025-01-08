@@ -10,6 +10,7 @@ project(
 # Project default module
 find_package(cmake-modules REQUIRED)
 include(cmake-modules/ProjectDefault)
+<<<<<<< before updating
 
 # Project custom modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -21,3 +22,5 @@ install(PROGRAMS ${cppcheck_runtimes}
         DESTINATION ${CMAKE_PROJECT_NAME}/Cppcheck)
 install(DIRECTORY ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/share/Cppcheck
         DESTINATION ${CMAKE_PROJECT_NAME})
+=======
+>>>>>>> after updating
