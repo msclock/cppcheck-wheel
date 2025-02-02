@@ -37,7 +37,7 @@ jobs:
           vcpkg format-manifest --all $(find cmake/vcpkg/ports/ -name "vcpkg.json")
 
       - name: Commit format vcpkg.json
-        uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
+        uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5
         if: success()
         with:
           commit_message: 'ci: format vcpkg configuration'
@@ -79,7 +79,7 @@ jobs:
 
       - name: Commit port hash
         if: steps.filter-hash.outputs.ports == 'true'
-        uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
+        uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5
         with:
           file_pattern: cmake/vcpkg/ports/*
           commit_message: 'ci: update port hash'
