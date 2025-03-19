@@ -108,7 +108,11 @@ repos:
 
   # Check jsonschema
   - repo: https://github.com/python-jsonschema/check-jsonschema
+<<<<<<< before updating
     rev: 0.31.1
+=======
+    rev: 0.31.2
+>>>>>>> after updating
     hooks:
       - id: check-dependabot
       - id: check-github-workflows
@@ -138,7 +142,11 @@ repos:
 
   # Check for renovate config
   - repo: https://github.com/renovatebot/pre-commit-hooks
+<<<<<<< before updating
     rev: 39.185.6
+=======
+    rev: 39.185.9
+>>>>>>> after updating
     hooks:
       - id: renovate-config-validator
         stages: [manual]
