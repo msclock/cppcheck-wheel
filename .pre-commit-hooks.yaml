@@ -1,0 +1,14 @@
+  - id: cppcheck
+    name: Cppcheck
+    description: Run cppcheck for static analysis of C/C++ code
+    entry: cppcheck
+    args:
+      - --inconclusive
+      - --suppress=missingIncludeSystem
+      - src
+    language: python
+    files: \.(cpp|cc|c\+\+|cxx|c)$
+    types_or:
+      - c++
+      - c
+    require_serial: true
