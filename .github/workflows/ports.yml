@@ -18,7 +18,7 @@ jobs:
       - name: Generate a bot token with BOT_APP_ID
         id: bot_token
         if: vars.BOT_APP_ID && env.BOT_PRIVATE_KEY != null
-        uses: actions/create-github-app-token@21cfef2b496dd8ef5b904c159339626a10ad380e # v1
+        uses: actions/create-github-app-token@v2
         env:
           BOT_PRIVATE_KEY: ${{ secrets.BOT_PRIVATE_KEY }}
         with:
@@ -26,7 +26,7 @@ jobs:
           private-key: ${{ secrets.BOT_PRIVATE_KEY }}
 
       - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        uses: actions/checkout@v4
         with:
           token: ${{ steps.bot_token.outputs.token || secrets.PAT || secrets.GITHUB_TOKEN }}
           ref: ${{ github.head_ref }}
@@ -37,7 +37,7 @@ jobs:
           vcpkg format-manifest --all $(find cmake/vcpkg/ports/ -name "vcpkg.json")
 
       - name: Commit format vcpkg.json
-        uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5
+        uses: stefanzweifel/git-auto-commit-action@v5
         if: success()
         with:
           commit_message: 'ci: format vcpkg configuration'
@@ -70,7 +70,7 @@ jobs:
 
       - name: Detect hash changes against local
         id: filter-hash
-        uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3
+        uses: dorny/paths-filter@v3
         with:
           list-files: shell
           base: HEAD
@@ -80,7 +80,7 @@ jobs:
 
       - name: Commit port hash
         if: steps.filter-hash.outputs.ports == 'true'
-        uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           file_pattern: cmake/vcpkg/ports/*
           commit_message: 'ci: update port hash'
