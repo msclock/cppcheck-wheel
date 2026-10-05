@@ -27,8 +27,8 @@ jobs:
           - {os: windows-2019, arch: AMD64, build: win}
           - {os: windows-2019, arch: x86, build: win}
           - {os: windows-2022, arch: ARM64, build: win}
-          - {os: macos-13, arch: x86_64, build: macos}
-          - {os: macos-14, arch: arm64, build: macos}
+          - {os: macos-15-intel, arch: x86_64, build: macos}
+          - {os: macos-15, arch: arm64, build: macos}
 
     steps:
       - uses: actions/checkout@v4
