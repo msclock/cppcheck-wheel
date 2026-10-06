@@ -13,22 +13,28 @@ vcpkg_from_github(
   main)
 
 if(VCPKG_TARGET_IS_LINUX)
-    if(VCPKG_TARGET_ARCHITECTURE STREQUAL "x86" OR VCPKG_TARGET_ARCHITECTURE STREQUAL "x64")
-      message(STATUS "Disable automatic elf rpath fixup for ${VCPKG_TARGET_ARCHITECTURE} linux")
-      set(VCPKG_FIXUP_ELF_RPATH OFF)
-    endif()
+  if(VCPKG_TARGET_ARCHITECTURE STREQUAL "x86" OR VCPKG_TARGET_ARCHITECTURE STREQUAL "x64")
+    message(STATUS "Disable automatic elf rpath fixup for ${VCPKG_TARGET_ARCHITECTURE} linux")
+    set(VCPKG_FIXUP_ELF_RPATH OFF)
+  endif()
 endif()
 
 vcpkg_check_features(
-    OUT_FEATURE_OPTIONS FEATURE_OPTIONS
-    FEATURES
-        have-rules                  HAVE_RULES
+  OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+  FEATURES
+      have-rules                  HAVE_RULES
 )
+
+if(EXISTS "/etc/alpine-release")
+  message(STATUS "No execinfo.h in muslc for alpine")
+  set(NO_UNIX_BACKTRACE_SUPPORT ON)
+endif()
 
 vcpkg_cmake_configure(
   SOURCE_PATH "${SOURCE_PATH}"
   OPTIONS
     -DDISABLE_DMAKE=ON
+    -DNO_UNIX_BACKTRACE_SUPPORT=${NO_UNIX_BACKTRACE_SUPPORT}
     ${FEATURE_OPTIONS}
 )
 
