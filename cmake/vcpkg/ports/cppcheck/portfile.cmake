@@ -1,3 +1,5 @@
+vcpkg_check_linkage(ONLY_STATIC_LIBRARY)
+
 vcpkg_from_github(
   OUT_SOURCE_PATH
   SOURCE_PATH
@@ -9,11 +11,6 @@ vcpkg_from_github(
   072179cf35f91708735a85966517b5788554c32443558865af64d782cfc082acd073219ab511f5e2f98bd8f1dc8c0d02447452a00f15524eda2ca20be6af8108
   HEAD_REF
   main)
-
-vcpkg_replace_string("${SOURCE_PATH}/cmake/compilerDefinitions.cmake"
-  [[-D_WIN64]]
-  [[]]
-)
 
 if(VCPKG_TARGET_IS_LINUX)
     if(VCPKG_TARGET_ARCHITECTURE STREQUAL "x86" OR VCPKG_TARGET_ARCHITECTURE STREQUAL "x64")
@@ -47,3 +44,4 @@ vcpkg_copy_tools(TOOL_NAMES cppcheck AUTO_CLEAN)
 
 set(VCPKG_POLICY_ALLOW_EMPTY_FOLDERS enabled)
 set(VCPKG_POLICY_EMPTY_INCLUDE_FOLDER enabled)
+set(VCPKG_POLICY_DLLS_IN_STATIC_LIBRARY enabled)
