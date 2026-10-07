@@ -78,9 +78,20 @@ function(_vcpkg_tool_bootstrap vcpkg_root)
   set(bootstrap_impl "${vcpkg_root}/scripts/bootstrap.sh")
   message(STATUS "Disable build vcpkg-test from source...")
   file(READ "${bootstrap_impl}" file_contents)
-  string(REPLACE [[cmakeConfigOptions="-D]]
-                 [[cmakeConfigOptions="-DBUILD_TESTING=OFF -D]] file_contents
-                 "${file_contents}")
+  if(NOT file_contents MATCHES [[DBUILD_TESTING=ON]])
+    string(REPLACE [[cmakeConfigOptions="-D]]
+                   [[cmakeConfigOptions="-DBUILD_TESTING=OFF -D]] file_contents
+                   "${file_contents}")
+  endif()
+  if(NOT file_contents MATCHES [[InternalFeatureSet]])
+    string(
+      REPLACE
+        [[cmakeConfigOptions="-D]]
+        [[sed -i 's/InternalFeatureSet separate_features{{FeatureNameCore.to_string(), feature->name}};/InternalFeatureSet separate_features{{FeatureNameCore.to_string()}};separate_features.push_back(feature->name);/g' $srcDir/src/vcpkg/commands.test-features.cpp
+    cmakeConfigOptions="-D]]
+        file_contents
+        "${file_contents}")
+  endif()
   file(WRITE "${bootstrap_impl}" "${file_contents}")
 
   message(STATUS "Build vcpkg from source...")
