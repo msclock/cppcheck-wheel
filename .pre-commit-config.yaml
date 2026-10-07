@@ -56,7 +56,11 @@ repos:
 
   # Mypy Check
   - repo: https://github.com/pre-commit/mirrors-mypy
+<<<<<<< before updating
     rev: v2.4.0
+=======
+    rev: v1.16.0
+>>>>>>> after updating
     hooks:
       - id: mypy
         files: src|tests
